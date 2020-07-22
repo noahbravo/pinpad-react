@@ -1,0 +1,30 @@
+@import '../../styles/base.sass'
+
+.pinpadButton
+  display: flex
+  margin-right: 1.5%
+  margin-left: 1.5%
+  margin-bottom: rem(20px)
+  justify-content: center
+  width: 30%
+  height: rem(64px)
+  box-sizing: border-box
+  background-color: $pale-blue
+  box-shadow: rem(0px 2px 4px 0px $light-blue)
+  color: $acent-color
+  font-family: $font
+  font-size: rem(24px)
+  border: none
+  border-radius: $border-radius
+  cursor: pointer
+  outline: none
+  transition: all .15s
+
+  &:hover, &:active, &:focus
+    background-color: darken($pale-blue, 5)
+    box-shadow: rem(0px 2px 4px 0px $dark-blue)
+    color: darken($light-blue, 10)
+
+  &__number
+    align-self: center
+

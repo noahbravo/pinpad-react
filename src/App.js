@@ -1,23 +1,35 @@
-import React from 'react';
+import React from 'react'
 
-function App() {
+// Styles
+import styles from './App.module.sass'
+
+// Components
+import HoneyCombIcon from './components/Icons/Honeycomb'
+import PinpadButton from './components/Button/PinpadButton.js'
+
+const App = () => {
+  const pinNumbers = [...Array(10).keys()].reverse() /* Generate pin pad numbers */
+  const placeholder = 'Enter pin'
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.pinpad__wrapper}>
+      <HoneyCombIcon />
+      <div className={styles.pinpad}>
+        <div className={styles.pinpad__screen}>
+          <span className={styles.pinpad__screen__text}>{placeholder}</span>
+        </div>
+        <div className={styles.pinpad__btnGroup}>
+          {pinNumbers.map(pinNumber => (
+            <PinpadButton
+              key={pinNumber}
+              data={pinNumber}
+              action={() => console.log(pinNumber)}
+            />
+          ))}
+        </div>
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

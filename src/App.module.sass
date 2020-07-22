@@ -1,0 +1,50 @@
+@import "./styles/base.sass"
+
+.pinpad
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  width: rem(450px)
+  height: rem(650px)
+  padding: rem(54px 44px)
+  box-sizing: border-box
+  border: rem(2px solid $acent-color)
+  border-radius: $border-radius
+  background-color: rgba($dark-blue, .6)
+  box-shadow: rem(0px 3px 44px 0px rgba($light-blue,.75))
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+  &__wrapper
+    height: 100vh
+    width: 100vw
+    background-color: $bg-color
+    overflow: hidden
+    position: relative
+
+  &__screen
+    display: flex
+    flex-direction: column
+    justify-content: center
+    height: 25%
+    background-color: $pale-blue
+    border-radius: $border-radius
+    box-shadow: rem(inset 1px 6px 26px -12px $light-blue)
+
+    &__text
+      font-family: $font
+      font-size: rem(28px)
+      text-transform: uppercase
+      text-align: center
+      color: $acent-color
+
+  &__btnGroup
+    display: flex
+    flex-direction: row-reverse
+    flex-wrap: wrap
+    justify-content: center
+
+
+
