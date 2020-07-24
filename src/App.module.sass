@@ -1,12 +1,14 @@
-@import "./styles/base.sass"
+@import "./styles/resources.sass"
 
 .pinpad
   display: flex
   flex-direction: column
   justify-content: space-between
-  width: rem(450px)
-  height: rem(650px)
-  padding: rem(54px 44px)
+  width: 55vh
+  height: 80vh
+  max-width: rem(450px)
+  max-height: rem(650px)
+  padding: 4% 3%
   box-sizing: border-box
   border: rem(2px solid $acent-color)
   border-radius: $border-radius
@@ -17,6 +19,10 @@
   left: 50%
   transform: translate(-50%, -50%)
 
+  +for-sm-width-down
+    padding: 6% 4%
+    max-width: 90vw
+
   &__wrapper
     height: 100vh
     width: 100vw
@@ -24,7 +30,7 @@
     overflow: hidden
     position: relative
 
-  &__screen
+  &__display
     display: flex
     flex-direction: column
     justify-content: center
@@ -35,16 +41,23 @@
 
     &__text
       font-family: $font
-      font-size: rem(28px)
+      font-size: $font-xxl
       text-transform: uppercase
       text-align: center
       color: $acent-color
+
+      +for-sm-height-down
+        font-size: $font-xl
+
+      +for-sm-width-down
+        font-size: $font-xl
 
   &__btnGroup
     display: flex
     flex-direction: row-reverse
     flex-wrap: wrap
     justify-content: center
+    height: 65%
 
 
 

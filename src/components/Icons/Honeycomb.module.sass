@@ -1,0 +1,21 @@
+
+@import '../../styles/resources.sass'
+
+.icon
+  &__stopColor
+    stop-color: $pale-purple
+
+    &.ok
+      +animate($okAnimation, 4s)
+
+    &.error
+      +animate($errorAnimation, 4s)
+
+    &.locked
+      +animate($lockedAnimation, 30s)
+
++animation-mixin($okAnimation, $ok)
++animation-mixin($errorAnimation,$error)
++animation-mixin($lockedAnimation,$locked)
+
+

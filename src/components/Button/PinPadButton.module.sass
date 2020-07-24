@@ -1,4 +1,4 @@
-@import '../../styles/base.sass'
+@import '../../styles/resources.sass'
 
 .pinpadButton
   display: flex
@@ -7,23 +7,38 @@
   margin-bottom: rem(20px)
   justify-content: center
   width: 30%
-  height: rem(64px)
+  height: 25%
+  max-height: rem(64px)
   box-sizing: border-box
   background-color: $pale-blue
   box-shadow: rem(0px 2px 4px 0px $light-blue)
   color: $acent-color
   font-family: $font
-  font-size: rem(24px)
+  font-size: $font-xl
   border: none
   border-radius: $border-radius
   cursor: pointer
   outline: none
   transition: all .15s
 
+  +for-sm-height-down
+    height: 20%
+    font-size: $font-l
+
+  +for-sm-width-down
+    height: 18%
+    font-size: $font-l
+
   &:hover, &:active, &:focus
+    &:not(.disabled)
+      background-color: darken($pale-blue, 5)
+      box-shadow: rem(0px 2px 4px 0px $dark-blue)
+      color: darken($light-blue, 10)
+
+  &.disabled
     background-color: darken($pale-blue, 5)
-    box-shadow: rem(0px 2px 4px 0px $dark-blue)
-    color: darken($light-blue, 10)
+    color: $pale-blue
+    cursor: default
 
   &__number
     align-self: center
