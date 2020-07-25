@@ -22,13 +22,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.js",
-    "lint-fix": "eslint --fix src/**/*.js",
-    "sass-lint": "sass-lint -vq src/**/*.sass"
+    "lint:js": "eslint src/**/*.js",
+    "lint:js:fix": "eslint --fix src/**/*.js",
+    "lint:sass": "sass-lint -vq src/**/*.sass",
+    "lint": "yarn run lint:js && yarn run lint:sass"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run lint && yarn run sass-lint && yarn run test"
+      "pre-commit": "yarn run lint"
     }
   },
   "browserslist": {
