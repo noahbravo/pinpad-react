@@ -2,9 +2,9 @@ import React from "react"
 import PropTypes from 'prop-types'
 
 // Styles
-import styles from './Honeycomb.module.sass'
+import styles from './HoneycombIcon.module.sass'
 
-const Honeycomb = ({ width, height, fill, className}) => (
+const HoneycombIcon = ({ width, height, fill, className}) => (
   <svg
     width={width}
     height={height}
@@ -25,25 +25,25 @@ const Honeycomb = ({ width, height, fill, className}) => (
         gradientTransform="matrix(738.401 0 0 739.459 719.972 456.466)"
         gradientUnits="userSpaceOnUse"
       >
-        <stop className={`${styles.icon__stopColor} ${styles[className] || ''}`}></stop>
+        <stop data-testid="stopColor" className={`${styles.icon__stopColor} ${styles[className] || ''}`}></stop>
         <stop offset="1"></stop>
       </radialGradient>
     </defs>
   </svg>
 )
 
-Honeycomb.defaultProps = {
+HoneycombIcon.defaultProps = {
   width: '100%',
   height: '100%',
   fill: 'none',
   className: ''
 }
 
-Honeycomb.propTypes = {
+HoneycombIcon.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
   fill: PropTypes.string,
   className: PropTypes.string
 }
 
-export default Honeycomb
+export default HoneycombIcon

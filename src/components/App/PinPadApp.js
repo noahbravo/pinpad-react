@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 // Styles
-import styles from './App.module.sass'
+import styles from './PinPadApp.module.sass'
 
 // Components
-import HoneyCombIcon from './components/Icons/Honeycomb'
-import PinpadButton from './components/Button/PinpadButton.js'
+import HoneyCombIcon from '../Icons/HoneycombIcon'
+import PinPadButton from '../Button/PinPadButton'
 
-const App = () => {
+const PinPadApp = () => {
   const correctPin = '4747' /* Hardcoded pin. To be fetched from an API */
   const pinNumbers = [...Array(10).keys()].reverse() /* Generate pin pad numbers */
   const placeholder = 'Enter pin' /* Pin pad display placeholder text */
@@ -44,7 +44,7 @@ const App = () => {
     : placeholder
 
   useEffect(() => {
-    // Check status once all pin numbers have been entered
+    // Update status once all pin numbers have been entered
     if (pin.length === correctPin.length) {
       const { current: currentAttempts } = attempts
       let currentStatus, attemptsToUpdate,
@@ -73,17 +73,17 @@ const App = () => {
   }, [pin])
 
   return (
-    <div className={styles.pinpad__wrapper}>
+    <div className={styles.pinPadApp__wrapper}>
       <HoneyCombIcon className={status} />
-      <div className={styles.pinpad}>
-        <div className={styles.pinpad__display}>
-          <span className={styles.pinpad__display__text}>
+      <div className={styles.pinPadApp}>
+        <div className={styles.pinPadApp__display}>
+          <span data-testid="displayText" className={styles.pinPadApp__display__text}>
             {status || displayText}
           </span>
         </div>
-        <div className={styles.pinpad__btnGroup}>
+        <div className={styles.pinPadApp__btnGroup}>
           {pinNumbers.map(pinNumber => (
-            <PinpadButton
+            <PinPadButton
               key={pinNumber}
               value={pinNumber.toString()}
               disabled={disabled}
@@ -96,4 +96,4 @@ const App = () => {
   )
 }
 
-export default App
+export default PinPadApp

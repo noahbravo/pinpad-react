@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import PinPadApp from './components/App/PinPadApp'
 import * as serviceWorker from './serviceWorker'
 
 // Reset styles
@@ -8,7 +8,7 @@ import 'normalize.css/normalize.css'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <PinPadApp />
   </React.StrictMode>,
   document.getElementById('root')
 )

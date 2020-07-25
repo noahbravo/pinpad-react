@@ -2,29 +2,29 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 // Styles
-import styles from './PinpadButton.module.sass'
+import styles from './PinPadButton.module.sass'
 
-const PinpadButton = ({ value, action, disabled }) => {
+const PinPadButton = ({ value, action, disabled }) => {
   return (
     <button
-      className={`${styles.pinpadButton} ${disabled ? styles.disabled : ''}`}
+      className={`${styles.pinPadButton} ${disabled ? styles.disabled : ''}`}
       type="button"
       disabled={disabled}
       onClick={action}
     >
-      <span className={styles.pinpadButton__number}>{value}</span>
+      <span className={styles.pinPadButton__number}>{value}</span>
     </button>
   )
 }
 
-PinpadButton.defaultProps = {
+PinPadButton.defaultProps = {
   disabled: false
 }
 
-PinpadButton.propTypes = {
+PinPadButton.propTypes = {
   value: PropTypes.string.isRequired,
   action: PropTypes.func.isRequired,
   disabled: PropTypes.bool
 }
 
-export default PinpadButton
+export default PinPadButton
