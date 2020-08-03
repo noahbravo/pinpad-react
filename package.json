@@ -1,5 +1,6 @@
 {
-  "name": "pinpad",
+  "name": "pinpad-react",
+  "author": "Elena Bravo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,11 +22,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint:js": "eslint src/**/*.js",
-    "lint:js:fix": "eslint --fix src/**/*.js",
-    "lint:sass": "sass-lint -vq src/**/*.sass",
-    "lint": "yarn run lint:js && yarn run lint:sass"
+    "eject": "react-scripts eject"
   },
   "husky": {
     "hooks": {
@@ -45,23 +42,10 @@
     ]
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "2.x",
-    "@typescript-eslint/parser": "2.0.0",
     "autoprefixer": "^9.8.5",
     "babel-eslint": "^10.1.0",
-    "eslint": "6.6.0",
-    "eslint-config-react-app": "^5.2.1",
-    "eslint-loader": "^4.0.2",
-    "eslint-plugin-flowtype": "3.x",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^23.18.0",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-react": "^7.20.3",
-    "eslint-plugin-react-hooks": "1.x",
     "fibers": "^5.0.0",
-    "husky": "^4.2.5",
     "node-sass": "^4.14.1",
-    "postcss": "^7.0.32",
-    "sass-lint": "^1.13.1"
+    "postcss": "^7.0.32"
   }
 }
