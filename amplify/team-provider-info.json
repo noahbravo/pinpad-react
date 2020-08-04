@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-pinpad-dev-200014-authRole",
+            "UnauthRoleArn": "arn:aws:iam::279422396421:role/amplify-pinpad-dev-200014-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::279422396421:role/amplify-pinpad-dev-200014-authRole",
+            "Region": "eu-west-2",
+            "DeploymentBucketName": "amplify-pinpad-dev-200014-deployment",
+            "UnauthRoleName": "amplify-pinpad-dev-200014-unauthRole",
+            "StackName": "amplify-pinpad-dev-200014",
+            "StackId": "arn:aws:cloudformation:eu-west-2:279422396421:stack/amplify-pinpad-dev-200014/5a465930-d67c-11ea-b729-0aad4e0395e8",
+            "AmplifyAppId": "d10k3mg45usdto"
+        }
+    }
+}

@@ -2,6 +2,8 @@
 
 SPA interactive pin pad application developed using react hooks and functional components.
 
+[Launch app 🚀](https://master.d10k3mg45usdto.amplifyapp.com/)
+
 - The pin has max of 4 digits long
 - The pin is hidden except for the last number, the rest are replaced with *
 - The pin is checked when the user inputs 4 digits
