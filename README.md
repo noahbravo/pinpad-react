@@ -8,7 +8,7 @@ SPA interactive pin pad application developed using react hooks and functional c
 - The screen displays "OK" if the pin is correct, otherwise it shows "ERROR". The pin pad is then reseted.
 - The pin pad locks for 30 secs, showing "LOCKED", after 3 failed attempts.
 
-[Launch app 🚀](https://master.d10k3mg45usdto.amplifyapp.com/)
+[Launch app](https://master.d10k3mg45usdto.amplifyapp.com/) 🚀
 
 
 ## How to
