@@ -1,6 +1,6 @@
 # Interactive pin pad
 
-SPA interactive pin pad developed using react hooks and functional components.
+Interactive pin pad SPA developed using react hooks and functional components.
 
 - The pin has max of 4 digits long
 - The pin is hidden except for the last number, the rest are replaced with *
