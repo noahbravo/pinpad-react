@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 
 // Styles
 import styles from './PinPadApp.module.sass'
@@ -16,61 +16,66 @@ const PinPadApp = () => {
   const lockedTime = 30000 /* Reset time when pin pad status is locked */
 
   const [pin, setPin] = useState('')
-  const [status, setStatus] = useState()
+  const [status, setStatus] = useState(placeholder)
   const [disabled, setDisabled] = useState(false)
-  const attempts = useRef(0)
+  const [attempts, setAttempts] = useState(0)
 
-  const handlePin = (number) => {
-    if (pin.length < correctPin.length) {
-      setPin(pin + number)
-    }
-  }
-
-  const handleSetAttempts = (attempt) => {
-    attempts.current = attempt
-  }
+  const tooManyAttemps = attempts === maxAttempts
+  const { length: correctPinLength } = correctPin
+  const { length: pinLength} = pin
 
   const handleReset = async (time) => {
     await setTimeout(() => {
       setPin('')
-      setStatus()
+      setStatus(placeholder)
       setDisabled(false)
     }, time)
   }
 
-  // Set screen text as pin if entered. Otherwise display the placeholder
-  const displayText = pin.length > 0
-    ? pin.split('').map((number, index, array) => (index + 1) === pin.length ? number : '*').join('')
-    : placeholder
+  const handlePin = (number) => {
+    const newPin = pin + number
+    if (pinLength < correctPinLength) {
+      setPin(newPin)
+    }
 
-  useEffect(() => {
     // Update status once all pin numbers have been entered
-    if (pin.length === correctPin.length) {
-      const { current: currentAttempts } = attempts
-      let currentStatus, attemptsToUpdate,
-        timeOut = resetTime
-
-      if (pin === correctPin) {
+    if (newPin.length === correctPinLength) {
+      let currentStatus,
+          attemptsToUpdate = 0,
+          timeOut = resetTime
+  
+      if (newPin === correctPin) {
         currentStatus = 'ok'
-        attemptsToUpdate = 0
-
-      } else if (maxAttempts === currentAttempts) {
-        currentStatus = 'locked'
-        attemptsToUpdate = 0
-        timeOut = lockedTime
 
       } else {
-        currentStatus = 'error'
-        attemptsToUpdate = currentAttempts + 1
+
+        if (tooManyAttemps) {
+          currentStatus = 'locked'
+          timeOut = lockedTime
+        } else {
+          currentStatus = 'error'
+          attemptsToUpdate = attempts + 1
+        }
       }
 
-      handleSetAttempts(attemptsToUpdate)
+      setAttempts(attemptsToUpdate)
       setStatus(currentStatus)
       setDisabled(true)
       handleReset(timeOut)
     }
+  }
 
-  }, [pin])
+  // Set screen text as pin if entered and pin is less than correctPin.
+  // Otherwise display status.
+  const getDisplayText = () => {
+    if (pinLength > 0 && pinLength < correctPinLength) {
+      return pin.split('').map(
+        (number, index) => (index + 1) === pinLength ? number : '*')
+        .join('')
+    } else {
+      return status
+    }
+  }
 
   return (
     <div className={styles.pinPadApp__wrapper}>
@@ -78,7 +83,7 @@ const PinPadApp = () => {
       <div className={styles.pinPadApp}>
         <div className={styles.pinPadApp__display}>
           <span data-testid="displayText" className={styles.pinPadApp__display__text}>
-            {status || displayText}
+            {getDisplayText()}
           </span>
         </div>
         <div className={styles.pinPadApp__btnGroup}>
