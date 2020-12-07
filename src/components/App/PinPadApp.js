@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useReducer } from 'react'
 
 // Styles
 import styles from './PinPadApp.module.sass'
@@ -16,18 +16,37 @@ const PinPadApp = () => {
   const lockedTime = 30000 /* Reset time when pin pad status is locked */
 
   const [pin, setPin] = useState('')
-  const [status, setStatus] = useState(placeholder)
-  const [disabled, setDisabled] = useState(false)
   const [attempts, setAttempts] = useState(0)
-
+  const [disabled, setDisabled] = useState(false)
   const tooManyAttemps = attempts === maxAttempts
+
+  const statusReducer = (state, { type }) => {
+    switch (type) {
+      case 'OK':
+        return 'ok'
+      
+      case 'ERROR':
+        if (tooManyAttemps) return 'locked'
+        return 'error'
+  
+      case 'RESET':
+        return placeholder
+
+      default:
+        throw new Error(`Unsupported type: ${type}`)
+    }
+  }
+
+  const [status, setStatus] = useReducer(statusReducer, placeholder)
+
   const { length: correctPinLength } = correctPin
   const { length: pinLength} = pin
 
-  const handleReset = async (time) => {
+  const handleReset = async (time, attempts) => {
     await setTimeout(() => {
       setPin('')
-      setStatus(placeholder)
+      setStatus({ type: 'RESET' })
+      setAttempts(attempts)
       setDisabled(false)
     }, time)
   }
@@ -40,28 +59,14 @@ const PinPadApp = () => {
 
     // Update status once all pin numbers have been entered
     if (newPin.length === correctPinLength) {
-      let currentStatus,
-          attemptsToUpdate = 0,
-          timeOut = resetTime
-  
-      if (newPin === correctPin) {
-        currentStatus = 'ok'
+      const okStatus = newPin === correctPin
+      const statusAction = okStatus ? 'OK' : 'ERROR'
+      const timeOut = tooManyAttemps ? lockedTime : resetTime
+      const attemptsToUpdate = (!okStatus && !tooManyAttemps) ? attempts + 1 : 0
 
-      } else {
-
-        if (tooManyAttemps) {
-          currentStatus = 'locked'
-          timeOut = lockedTime
-        } else {
-          currentStatus = 'error'
-          attemptsToUpdate = attempts + 1
-        }
-      }
-
-      setAttempts(attemptsToUpdate)
-      setStatus(currentStatus)
+      setStatus({ type: statusAction })
       setDisabled(true)
-      handleReset(timeOut)
+      handleReset(timeOut, attemptsToUpdate)
     }
   }
 
