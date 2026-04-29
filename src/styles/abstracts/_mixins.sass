@@ -1,3 +1,6 @@
+@use "./functions" as *
+@use "./variables" as *
+
 // Animations
 =animation-mixin($name, $color)
   @keyframes #{$name}
@@ -22,6 +25,5 @@
 =for-sm-height-down
   @media (max-height: rem(690px))
     @content
-
 
 

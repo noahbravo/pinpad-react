@@ -1,4 +1,5 @@
-import React, { useState, useReducer } from 'react'
+import React, { useReducer, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
 
 // Styles
 import styles from './PinPadApp.module.sass'
@@ -7,79 +8,115 @@ import styles from './PinPadApp.module.sass'
 import HoneyCombIcon from '../Icons/HoneycombIcon'
 import PinPadButton from '../Button/PinPadButton'
 
-const PinPadApp = () => {
-  const correctPin = '4747' /* Hardcoded pin. To be fetched from an API */
-  const pinNumbers = [...Array(10).keys()].reverse() /* Generate pin pad numbers */
-  const placeholder = 'Enter pin' /* Pin pad display placeholder text */
-  const maxAttempts = 2 /* Max number of incorrect attempts */
-  const resetTime = 1200 /* Reset time when pin pad status is ok or error */
-  const lockedTime = 30000 /* Reset time when pin pad status is locked */
+const DEFAULT_CORRECT_PIN = '4747'
+const PIN_NUMBERS = [...Array(10).keys()].reverse()
+const PLACEHOLDER = 'Enter pin'
+const MAX_ATTEMPTS = 3
+const RESET_TIME = 1200
+const LOCKED_TIME = 30000
 
-  const [pin, setPin] = useState('')
-  const [attempts, setAttempts] = useState(0)
-  const [disabled, setDisabled] = useState(false)
-  const tooManyAttemps = attempts === maxAttempts
+const STATUS = {
+  idle: 'idle',
+  ok: 'ok',
+  error: 'error',
+  locked: 'locked'
+}
 
-  const statusReducer = (state, { type }) => {
-    switch (type) {
-      case 'OK':
-        return 'ok'
-      
-      case 'ERROR':
-        if (tooManyAttemps) return 'locked'
-        return 'error'
-  
-      case 'RESET':
-        return placeholder
+const getInitialState = () => ({
+  pin: '',
+  attempts: 0,
+  status: STATUS.idle
+})
 
-      default:
-        throw new Error(`Unsupported type: ${type}`)
-    }
-  }
+const pinPadReducer = (state, action) => {
+  switch (action.type) {
+    case 'ADD_DIGIT': {
+      if (state.status !== STATUS.idle) return state
 
-  const [status, setStatus] = useReducer(statusReducer, placeholder)
+      const newPin = `${state.pin}${action.digit}`
+      const correctPinLength = action.correctPin.length
 
-  const { length: correctPinLength } = correctPin
-  const { length: pinLength} = pin
+      if (newPin.length < correctPinLength) {
+        return {
+          ...state,
+          pin: newPin
+        }
+      }
 
-  const handleReset = async (time, attempts) => {
-    await setTimeout(() => {
-      setPin('')
-      setStatus({ type: 'RESET' })
-      setAttempts(attempts)
-      setDisabled(false)
-    }, time)
-  }
+      const isCorrectPin = newPin === action.correctPin
+      const nextAttempts = isCorrectPin ? 0 : state.attempts + 1
+      const isLocked = !isCorrectPin && nextAttempts >= action.maxAttempts
 
-  const handlePin = (number) => {
-    const newPin = pin + number
-    if (pinLength < correctPinLength) {
-      setPin(newPin)
+      return {
+        pin: newPin,
+        attempts: isLocked ? 0 : nextAttempts,
+        status: isCorrectPin ? STATUS.ok : isLocked ? STATUS.locked : STATUS.error
+      }
     }
 
-    // Update status once all pin numbers have been entered
-    if (newPin.length === correctPinLength) {
-      const okStatus = newPin === correctPin
-      const statusAction = okStatus ? 'OK' : 'ERROR'
-      const timeOut = tooManyAttemps ? lockedTime : resetTime
-      const attemptsToUpdate = (!okStatus && !tooManyAttemps) ? attempts + 1 : 0
+    case 'RESET':
+      return {
+        ...getInitialState(),
+        attempts: action.attempts
+      }
 
-      setStatus({ type: statusAction })
-      setDisabled(true)
-      handleReset(timeOut, attemptsToUpdate)
+    default:
+      throw new Error(`Unsupported type: ${action.type}`)
+  }
+}
+
+const PinPadApp = ({
+  correctPin = DEFAULT_CORRECT_PIN,
+  maxAttempts = MAX_ATTEMPTS,
+  resetTime = RESET_TIME,
+  lockedTime = LOCKED_TIME
+}) => {
+  const [state, dispatch] = useReducer(pinPadReducer, getInitialState())
+  const resetTimer = useRef()
+  const { pin, attempts, status } = state
+  const pinLength = pin.length
+  const isWaitingForReset = status !== STATUS.idle
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(resetTimer.current)
     }
+  }, [])
+
+  useEffect(() => {
+    if (status === STATUS.idle) return
+
+    const resetDelay = status === STATUS.locked ? lockedTime : resetTime
+    const attemptsAfterReset = status === STATUS.error ? attempts : 0
+
+    clearTimeout(resetTimer.current)
+    resetTimer.current = setTimeout(() => {
+      dispatch({ type: 'RESET', attempts: attemptsAfterReset })
+    }, resetDelay)
+
+    return () => {
+      clearTimeout(resetTimer.current)
+    }
+  }, [attempts, lockedTime, resetTime, status])
+
+  const handlePin = (digit) => {
+    dispatch({
+      type: 'ADD_DIGIT',
+      digit,
+      correctPin,
+      maxAttempts
+    })
   }
 
-  // Set screen text as pin if entered and pin is less than correctPin.
-  // Otherwise display status.
   const getDisplayText = () => {
-    if (pinLength > 0 && pinLength < correctPinLength) {
+    if (pinLength > 0 && pinLength < correctPin.length) {
       return pin.split('').map(
         (number, index) => (index + 1) === pinLength ? number : '*')
         .join('')
-    } else {
-      return status
     }
+
+    if (status === STATUS.idle) return PLACEHOLDER
+    return status
   }
 
   return (
@@ -92,11 +129,11 @@ const PinPadApp = () => {
           </span>
         </div>
         <div className={styles.pinPadApp__btnGroup}>
-          {pinNumbers.map(pinNumber => (
+          {PIN_NUMBERS.map(pinNumber => (
             <PinPadButton
               key={pinNumber}
               value={pinNumber.toString()}
-              disabled={disabled}
+              disabled={isWaitingForReset}
               action={() => handlePin(pinNumber)}
             />
           ))}
@@ -104,6 +141,13 @@ const PinPadApp = () => {
       </div>
     </div>
   )
+}
+
+PinPadApp.propTypes = {
+  correctPin: PropTypes.string,
+  maxAttempts: PropTypes.number,
+  resetTime: PropTypes.number,
+  lockedTime: PropTypes.number
 }
 
 export default PinPadApp

@@ -1,0 +1,17 @@
+@use "sass:math"
+@use "sass:list"
+@use "sass:meta"
+
+@function rem($value)
+  @if meta.type-of($value) == "number" and math.unit($value) == "px"
+    @return math.div($value, 16px) * 1rem
+
+  @if meta.type-of($value) == "list"
+    $result: ()
+
+    @each $item in $value
+      $result: list.append($result, rem($item), list.separator($value))
+
+    @return $result
+
+  @return $value

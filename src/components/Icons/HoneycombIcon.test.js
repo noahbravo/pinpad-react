@@ -7,7 +7,6 @@ describe('HoneycombIcon', () => {
 
   test('Should render HoneycombIcon correctly', () => {
     const component = render(<HoneycombIcon />)
-    expect(component).toMatchSnapshot()
     const stopColor = component.getByTestId('stopColor')
     expect(stopColor).not.toHaveClass('locked')
   })

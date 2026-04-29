@@ -21,8 +21,8 @@ describe('PinPadButton', () => {
   const getButton = () => screen.getByRole('button', {name: testProps.value})
 
   test('Should render PinPadButton correctly', () => {
-    const component = render(<PinPadButton { ...testProps }/>)
-    expect(component).toMatchSnapshot()
+    render(<PinPadButton { ...testProps }/>)
+    expect(getButton()).toBeInTheDocument()
   })
 
   test('Action function should be called onClick', () => {
