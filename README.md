@@ -1,34 +1,68 @@
-# Interactive pin pad
+# Interactive Pin Pad
 
-Interactive pin pad SPA developed using react hooks and functional components.
+A small React single-page app that simulates a PIN keypad.
 
-- The pin has max of 4 digits long
-- The pin is hidden except for the last number, the rest are replaced with *
-- The pin is checked when the user inputs 4 digits
-- The screen displays "OK" if the pin is correct, otherwise it shows "ERROR". The pin pad is then reseted.
-- The pin pad locks for 30 secs, showing "LOCKED", after 3 failed attempts.
+## Behavior
 
-[Launch app](https://master.d10k3mg45usdto.amplifyapp.com/) 🚀
+- The PIN is 4 digits by default.
+- Entered digits are masked except for the latest digit.
+- The PIN is validated once all digits have been entered.
+- A correct PIN displays `ok`, then resets.
+- An incorrect PIN displays `error`, then resets.
+- After 3 incorrect attempts, the keypad displays `locked` for 30 seconds.
 
+## Stack
 
-## How to
+- React 19
+- TypeScript
+- Vite
+- Vitest
+- Testing Library
+- Sass modules
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), which comes with the following predefined scripts:
+## Getting Started
 
-### Run development mode
+Install dependencies:
 
+```sh
+npm install
 ```
-$ yarn start
+
+Run the development server:
+
+```sh
+npm start
 ```
 
-### Run build
+Run tests:
 
-```
-$ yarn build
+```sh
+npm test
 ```
 
-### Run tests
+Build for production:
 
+```sh
+npm run build
 ```
-$ yarn test
+
+## Project Structure
+
+- `src/main.tsx`: app entrypoint.
+- `src/components/App/PinPadApp.tsx`: presentational keypad composition.
+- `src/components/App/usePinPad.ts`: PIN state machine, masking, reset timer, lockout rules.
+- `src/components/Button/PinPadButton.tsx`: keypad button.
+- `src/components/Icons/HoneycombIcon.tsx`: animated background icon.
+
+## Configuration
+
+`PinPadApp` accepts optional props for the PIN and timings:
+
+```tsx
+<PinPadApp
+  correctPin="4747"
+  maxAttempts={3}
+  resetTime={1200}
+  lockedTime={30000}
+/>
 ```

@@ -1,10 +1,19 @@
-import React from "react"
-import PropTypes from 'prop-types'
-
 // Styles
 import styles from './HoneycombIcon.module.sass'
 
-const HoneycombIcon = ({ width, height, fill, className}) => (
+type HoneycombIconProps = {
+  width?: string
+  height?: string
+  fill?: string
+  className?: string
+}
+
+const HoneycombIcon = ({
+  width = '100%',
+  height = '100%',
+  fill = 'none',
+  className = ''
+}: HoneycombIconProps) => (
   <svg
     width={width}
     height={height}
@@ -31,19 +40,5 @@ const HoneycombIcon = ({ width, height, fill, className}) => (
     </defs>
   </svg>
 )
-
-HoneycombIcon.defaultProps = {
-  width: '100%',
-  height: '100%',
-  fill: 'none',
-  className: ''
-}
-
-HoneycombIcon.propTypes = {
-  width: PropTypes.string,
-  height: PropTypes.string,
-  fill: PropTypes.string,
-  className: PropTypes.string
-}
 
 export default HoneycombIcon

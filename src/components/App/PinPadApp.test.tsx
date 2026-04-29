@@ -1,5 +1,5 @@
-import React from 'react'
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react"
+import type { RenderResult } from '@testing-library/react'
 import PinPadApp from './PinPadApp'
 
 const placeholder = 'Enter pin'
@@ -9,15 +9,18 @@ const errorStatus = 'error'
 const lockedStatus = 'locked'
 const incorrectPin = ['2', '9', '6', '5']
 const correctPin = ['4', '7', '4', '7']
+const shortCorrectPin = ['1', '2']
 
-const fireButtons = (pin, component) => {
+type QueryTarget = Pick<RenderResult, 'getByRole' | 'getByTestId'>
+
+const fireButtons = (pin: string[], component: QueryTarget) => {
   pin.forEach(number => {
     const button = component.getByRole('button', { name: number })
     fireEvent.click(button)
   })
 }
 
-const getDisplayText = (component) => component.getByTestId('displayText')
+const getDisplayText = (component: QueryTarget) => component.getByTestId('displayText')
 
 describe('PinpadApp', () => {
   afterEach(cleanup)
@@ -39,18 +42,24 @@ describe('PinpadApp', () => {
 
 describe('PinpadApp status', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
     cleanup()
-    jest.runOnlyPendingTimers()
-    jest.useRealTimers()
+    vi.runOnlyPendingTimers()
+    vi.useRealTimers()
   })
 
   const resetPinPad = () => {
     act(() => {
-      jest.advanceTimersByTime(1200)
+      vi.advanceTimersByTime(1200)
+    })
+  }
+
+  const advanceTimers = (time: number) => {
+    act(() => {
+      vi.advanceTimersByTime(time)
     })
   }
 
@@ -59,8 +68,14 @@ describe('PinpadApp status', () => {
     fireButtons(correctPin, screen)
     const displayText = getDisplayText(screen)
     expect(displayText).toHaveTextContent(okStatus)
+    expect(screen.getAllByRole('button')).toEqual(
+      expect.arrayContaining([expect.objectContaining({ disabled: true })])
+    )
     resetPinPad()
     expect(displayText).toHaveTextContent(placeholder)
+    expect(screen.getAllByRole('button')).toEqual(
+      expect.arrayContaining([expect.objectContaining({ disabled: false })])
+    )
   })
 
   test('Should display error when pin is incorrect and reset pin pad', () => {
@@ -82,6 +97,28 @@ describe('PinpadApp status', () => {
     fireButtons(incorrectPin, screen)
     const displayText = getDisplayText(screen)
     expect(displayText).toHaveTextContent(lockedStatus)
+  })
+
+  test('Should use custom pin and reset time', () => {
+    render(<PinPadApp correctPin="12" resetTime={500} />)
+    fireButtons(shortCorrectPin, screen)
+    const displayText = getDisplayText(screen)
+    expect(displayText).toHaveTextContent(okStatus)
+    advanceTimers(499)
+    expect(displayText).toHaveTextContent(okStatus)
+    advanceTimers(1)
+    expect(displayText).toHaveTextContent(placeholder)
+  })
+
+  test('Should use custom max attempts and locked time', () => {
+    render(<PinPadApp correctPin="12" maxAttempts={1} lockedTime={1000} />)
+    fireButtons(['9', '9'], screen)
+    const displayText = getDisplayText(screen)
+    expect(displayText).toHaveTextContent(lockedStatus)
+    advanceTimers(999)
+    expect(displayText).toHaveTextContent(lockedStatus)
+    advanceTimers(1)
+    expect(displayText).toHaveTextContent(placeholder)
   })
 
 })

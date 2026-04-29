@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from "@testing-library/react"
 import HoneycombIcon from './HoneycombIcon'
 
@@ -14,7 +13,7 @@ describe('HoneycombIcon', () => {
   test('HoneycombIcon className should match that of className prop', () => {
     render(<HoneycombIcon className={className} />)
     const stopColor = screen.getByTestId('stopColor')
-    expect(stopColor).toHaveClass(className)
+    expect(stopColor.getAttribute('class')).toContain(className)
   })
 
 })

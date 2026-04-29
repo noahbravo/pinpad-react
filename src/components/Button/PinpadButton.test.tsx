@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 import PinPadButton from './PinPadButton'
 
@@ -6,7 +5,7 @@ describe('PinPadButton', () => {
   const testProps = {
     value: '1',
     disabled: false,
-    action: jest.fn()
+    action: vi.fn()
   }
 
   afterEach(() => {
@@ -14,7 +13,7 @@ describe('PinPadButton', () => {
     testProps.action.mockClear()
   })
 
-  const renderPinPad = (props) => {
+  const renderPinPad = (props: typeof testProps) => {
     render(<PinPadButton {...props} />)
   }
 
@@ -33,7 +32,7 @@ describe('PinPadButton', () => {
   })
 
   test('PinPadButton should be disabled when property is set to true', () => {
-    const disabledBtnProps = {...testProps, disabled: true}
+    const disabledBtnProps = { ...testProps, disabled: true }
     renderPinPad(disabledBtnProps)
     const button = getButton()
     expect(button).toHaveAttribute('disabled')
